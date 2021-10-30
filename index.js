@@ -31,6 +31,12 @@ async function run (){
             res.send(tours);
         })
 
+        app.post('/tours/add' , async(req , res)=>{
+            const tour = req.body;
+          const result = await toursCollection.insertOne(tour);
+           res.json(result);
+           console.log(result)
+        })
         //Add Data To Database
 
         app.post("/books/add", async (req, res) => {
@@ -40,7 +46,7 @@ async function run (){
       console.log(result)
     });
 
-    //Delete 
+    //Delete an booked item from user
     app.delete('/books/:id' , async(req , res)=>{
         const id = req.params.id;
         const query = { _id: (id) };
@@ -48,6 +54,8 @@ async function run (){
         console.log('this' , result)
         res.json(result);
     })
+   
+
 
     //get booking data 
     app.get('/books' , async(req , res)=>{
