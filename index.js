@@ -20,6 +20,7 @@ async function run (){
         const database = client.db('bdTour');
         const toursCollection = database.collection('tours');
         const booking_Collection = database.collection("books");
+        const order_Collection = database.collection("orders");
 
 
         //Get Tours List
@@ -55,9 +56,36 @@ async function run (){
         res.json(books)
     })
 
+   //add order
 
+    app.post('/orders', async (req, res) => {
+        const order = req.body;
+      const result = await order_Collection.insertOne(order);
+      res.json(result);
+        console.log(result)
+      })
+       // get orders
+
+    app.get('/orders' , async(req , res)=>{
+        const cursor = order_Collection.find({});
+        const orders = await cursor.toArray();
+        res.json(orders)
+    })
+
+    //delete order from admin
+
+    app.delete('/orders/:id' , async(req , res)=>{
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result= await order_Collection.deleteOne(query);
+        console.log('admin booked ' , result)
+        res.json(result);
+    })
 
     }
+
+ 
+
     finally{
         // await client.close();
     }
